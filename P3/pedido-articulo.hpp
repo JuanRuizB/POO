@@ -1,8 +1,7 @@
 #ifndef PEDIDO_ARTICULO_HPP_
 #define PEDIDO_ARTICULO_HPP_
 #include <iostream>
-#include <map>
-#include <functional>   // std::greater
+#include <iomanip>
 #include "pedido.hpp"
 #include "articulo.hpp"
 class Pedido;
@@ -23,48 +22,43 @@ private:
 	unsigned cantidad_;
 };
 
-std::ostream& operator <<(std::ostream& os,const LineaPedido& lin_ped)
-{
-	os << lin_ped.precio_venta() << " €" << setw(4) << lin_ped.cantidad() << endl;
-	return os;
-}
+ostream& operator <<(ostream& os,const LineaPedido& lin_ped);
 
-struct OrdenaPedidos : public std::binary_function<const Articulo*,const Articulo*,bool>
+
+	struct OrdenaArticulos : public std::binary_function<const Articulo*,const Articulo*,bool>
 	{
- 		bool operator() (const Articulo* a, const Articulo* b)const;
+ 		bool operator () (const Articulo* a, const Articulo* b)const;
 	};
 
-	struct OrdenaArticulos : public std::binary_function<const Pedido*,const Pedido*,bool>
+	struct OrdenaPedidos : public std::binary_function<const Pedido*,const Pedido*,bool>
 	{
- 		bool operator() (const Pedido* a, const Pedido* b)const;
+ 		bool operator () (const Pedido* x, const Pedido* y)const;
 	};
 
 class Pedido_Articulo{
 public:
-	typedef map<Articulo*,LineaPedido, OrdenaArticulos> ItemsPedido;
-	typedef map<Pedido*,LineaPedido, OrdenaPedidos> Pedidos;
+	typedef std::map<Articulo*,LineaPedido, OrdenaArticulos> ItemsPedido;
+	typedef std::map<Pedido*,LineaPedido, OrdenaPedidos> Pedidos;
 
-	//typedef sort (auto ini = ped_art.begin(),auto fini = ped_art.end() , greater<int>() ) OrdenaPedidos;
-	//typedef sort (auto ini = art_ped.begin(),auto fini = art_ped.end() , greater<Cadena>()) OrdenaArticulos;
 
 	void pedir(Pedido& ped, Articulo& art, double pre, unsigned cant = 1);
 	void pedir(Articulo& art,Pedido& ped, double pre, unsigned cant = 1);
 
 	ItemsPedido& detalle(Pedido& ped);
 
-	Pedidos& ventas(Articulo& art);
+	Pedidos ventas(Articulo& art);
 
-	ostream& mostrarDetallePedidos(ostream& os);
-	ostream& mostrarVentasArticulos(ostream& os);
+	std::ostream& mostrarDetallePedidos(std::ostream& os);
+	std::ostream& mostrarVentasArticulos(std::ostream& os);
 
 private:
-	map<Pedido*, ItemsPedido, OrdenaPedidos> directa_;
-	map<Articulo*, Pedidos, OrdenaArticulos> inversa_;
+	std::map<Pedido*, ItemsPedido, OrdenaPedidos> directa_;
+	std::map<Articulo*, Pedidos, OrdenaArticulos> inversa_;
 };
 
-ostream& operator <<(ostream& os, Pedido_Articulo::ItemsPedido x);
+std::ostream& operator <<(std::ostream& os, Pedido_Articulo::ItemsPedido x);
 
-ostream& operator <<(ostream& os, Pedido_Articulo::Pedidos x );
+std::ostream& operator <<(std::ostream& os, Pedido_Articulo::Pedidos x );
 
 
 

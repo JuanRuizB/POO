@@ -1,16 +1,16 @@
 #ifndef PEDIDO_HPP_
 #define PEDIDO_HPP_
 
-#include <iomanip>
 #include <iostream>
-#include "../P2/usuario.hpp"
+
 #include "../P1/fecha.hpp"
 #include "../P2/tarjeta.hpp"
+
+using namespace std;
+
 class Usuario_Pedido;
 class Pedido_Articulo;
 
-
-using namespace std;
 
 class Pedido {
 public:
@@ -18,31 +18,31 @@ public:
 
 	class Vacio{
 	public:
-		Vacio(const Usuario& usu):us(&usu) { }
-		const Usuario& usuario() const { return *us;}
+		Vacio( Usuario const* usu):vac(usu) { }
+		const Usuario& usuario() const { return *vac;}
 	private:
-		const Usuario* us;
+		 Usuario const* vac;
 	};
 
 	class Impostor{
 	public:
-		Impostor(const Usuario& usu):us(&usu) { }
-		const Usuario& usuario() const { return *us;}
+		Impostor( Usuario const* usu):im(usu) { }
+		const Usuario& usuario() const { return *im;}
 	private:
-		const Usuario* us;
+		 Usuario const* im;
 	};
 
 	class SinStock{
 	public:
-		SinStock(const Articulo& ar):art(&ar) { }
+		SinStock( Articulo const* ar):art(ar) { }
 		const Articulo& articulo() const { return *art;}
 	private:
-		const Articulo* art;
+		 Articulo const* art;
 	};
 
 	int numero() const {return num_;}
 
-	const Tarjeta& tarjeta() const {return *tarjeta_;}
+	Tarjeta const* tarjeta() const {return tarjeta_;}
 
 	const Fecha& fecha() const {return fecha_;}
 

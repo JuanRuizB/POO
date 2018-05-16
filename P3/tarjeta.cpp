@@ -7,18 +7,24 @@ bool luhn(const Cadena& numero);
 
 //******************************NUMERO**************************
 
-Numero::Numero(const Cadena& num)
+Numero::Numero(Cadena num)
 {
-	Cadena aux;
-
-	remove_if(aux.begin(),aux.end(),EsBlanco());
-
-	if(aux.length() < 13 || aux.length() > 19)
+	if(num.length() == 0)
 		throw Incorrecto(Razon::LONGITUD);
+
+
+	remove_if(num.begin(),num.end()+1,EsBlanco());
+
+	Cadena aux(num.c_str());
+
 	if( count_if(aux.begin(), aux.end(), static_cast<int(*)(int)>(isdigit)) != aux.length())
 	 throw Incorrecto(Razon::DIGITOS);
 
+	if(aux.length() < 13 || aux.length() > 19)
+		throw Incorrecto(Razon::LONGITUD);
+
 	if(!luhn(aux)) throw Incorrecto(Razon::NO_VALIDO);
+
 	tarjeta_ = aux;
 }
 

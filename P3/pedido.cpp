@@ -1,25 +1,21 @@
-
+#include <iomanip>
 #include "pedido.hpp"
 #include "usuario-pedido.hpp"
 #include "pedido-articulo.hpp"
 
+using namespace std;
 
 int Pedido::N_pedidos = 0;
 
-
-int Pedido::n_total_pedidos()
-{
-	return N_pedidos;
-}
 
 Pedido::Pedido(Usuario_Pedido& us_pe, Pedido_Articulo& pe_art, Usuario& u, const Tarjeta& t, const Fecha& fp)
 	:num_(N_pedidos + 1), tarjeta_(&t), fecha_(fp), total_(0)
 {
 	if(u.n_articulos() == 0)
-		throw Vacio(u); 							//Carrito vacio
+		throw Pedido::Vacio(&u); 							//Carrito vacio
 
 	if(t.titular() != &u)
-		throw Impostor(u); 							//Tarjeta robada
+		throw Pedido::Impostor(&u); 							//Tarjeta robada
 
 	if(t.caducidad() < fp)
 		throw Tarjeta::Caducada(t.caducidad()); 	//Tarjeta caducada
@@ -30,7 +26,7 @@ Pedido::Pedido(Usuario_Pedido& us_pe, Pedido_Articulo& pe_art, Usuario& u, const
 		if(c.first->stock() < c.second) //no hay bastante stock en el armasén
 		{
 			 const_cast<Usuario::Articulos&>(u.compra()).clear();//necesitamos quitar el const que nos devuelve u.compra()
-			throw SinStock(c.first);				
+			throw Pedido::SinStock(c.first);				
 		}
 	}
 		Usuario::Articulos carroAux = u.compra();
@@ -57,8 +53,9 @@ Pedido::Pedido(Usuario_Pedido& us_pe, Pedido_Articulo& pe_art, Usuario& u, const
 
 ostream& operator << (ostream& os, const Pedido& ped)
 {
-	os << "Num. pedido: " << ped.numero() << endl;
-	os << "Fecha:" << setw(7) << ped.fecha() << endl;
-	os << "Pagado con:" << setw(2) << ped.tarjeta() << endl;
-	os << "Importe:" << setw(5) << ped.total() << " €" << endl;
-}
+	os << "Núm. pedido: " << ped.numero() << endl;
+	os << "Fecha:       " << ped.fecha() << endl;
+	os << "Pagado con:  " << *ped.tarjeta() << endl;
+	os << "Importe:     " << std::fixed << std::setprecision(2) << ped.total() << " €";
+	return os;
+};

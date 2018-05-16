@@ -21,7 +21,7 @@ public:
 
 	enum Razon {LONGITUD,DIGITOS, NO_VALIDO};
 
-	Numero(const Cadena& num);
+	Numero(Cadena num);
 	operator const char*() const { return tarjeta_.c_str(); }
 
 	class Incorrecto{
