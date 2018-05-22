@@ -40,12 +40,12 @@ typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
  const_reverse_iterator crend()const noexcept{return const_reverse_iterator(begin());}
 
 
-explicit Cadena( size_t tam = 0,char c = ' ')noexcept;
-Cadena(const Cadena& cad)noexcept;
-Cadena(Cadena&& cad)noexcept;
-Cadena(const char* s)noexcept;
+explicit Cadena( unsigned  tam = 0,char c = ' ');
+Cadena(const Cadena& cad);
+Cadena(Cadena&& cad);
+Cadena(const char* s);
 
-~Cadena() noexcept;
+~Cadena();
 
 
 Cadena& operator =(const Cadena& a);
@@ -60,13 +60,13 @@ char operator [](size_t i) const;
 char& at (size_t i);
 char at (size_t i) const;
 
-Cadena substr(size_t i, size_t tam) const;
+Cadena substr(size_t i, unsigned tam) const;
 
-size_t length() const noexcept;
+unsigned length() const noexcept;
 
 private:
 	char* s_;
-	size_t tam_;
+	unsigned tam_;
 };
 
  std::istream& operator >>(std::istream &i,Cadena& cad);
@@ -100,7 +100,7 @@ namespace std { // Estaremos dentro del espacio de nombres std
 }
 
 
-inline size_t Cadena::length() const noexcept { return tam_; }
+inline unsigned Cadena::length() const noexcept { return tam_; }
 
 inline char& Cadena::operator [](size_t i)
 {

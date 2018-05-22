@@ -3,7 +3,7 @@
 
 using namespace std;
 
-Cadena::Cadena( size_t tam,const char c)noexcept: s_(new char[tam+1]),tam_(tam)
+Cadena::Cadena( unsigned tam,const char c): s_(new char[tam+1]),tam_(tam)
 {
 	for (unsigned i = 0; i < tam; i++)
             s_[i]=c;
@@ -11,23 +11,23 @@ Cadena::Cadena( size_t tam,const char c)noexcept: s_(new char[tam+1]),tam_(tam)
 	s_[tam_]='\0';
 }
 
-Cadena::Cadena(const Cadena& cad)noexcept: s_(new char[cad.tam_+1]),tam_(cad.tam_)
+Cadena::Cadena(const Cadena &cad): s_(new char[cad.tam_+1]),tam_(cad.tam_)
 {
 	strcpy(s_,cad.s_);
 }
 
-Cadena::Cadena(Cadena&& cad) noexcept: s_(cad.s_),tam_(cad.tam_)
+Cadena::Cadena(Cadena&& cad): s_(cad.s_),tam_(cad.tam_)
 {
 	cad.s_ = nullptr;
 	cad.tam_ = 0;
 }
 
-Cadena::Cadena(const char* s)noexcept: s_(new char[strlen(s)+1]),tam_(strlen(s))
+Cadena::Cadena(const char* s): s_(new char[strlen(s)+1]),tam_(strlen(s))
 {
 	strcpy(s_,s);
 }
 
-Cadena::~Cadena() noexcept
+Cadena::~Cadena()
 {
 	delete[] s_;
 }
@@ -165,20 +165,19 @@ char Cadena::at (size_t i) const
 	throw out_of_range{"Error. Índice fuera del rango de la cadena"};
 }
 
-Cadena Cadena::substr(size_t i, size_t tam) const
+Cadena Cadena::substr(size_t i, unsigned tam) const
 {
 
 	if(i >= this->length() || i+tam > this->length() || i+tam < i)
 		throw out_of_range{"Error de tamaño"};
-	else{
-		Cadena A(tam+1);
-		for (unsigned j = 0; j < tam; j++)
-		{
-			A.s_[j] = this->s_[i+j];
-		}
-		A.s_[tam] = '\0';
-		return A;
-	}
+	
+		char* aux = new char[tam+1];
+		strncpy(aux,s_ + i,tam);
+		aux[tam]='\0';
+		Cadena cad(aux);
+		delete[] aux;
+		return cad;
+	
 }
 
  std::istream& operator >>(std::istream &i,Cadena& cad)
