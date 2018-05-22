@@ -12,10 +12,10 @@ Pedido::Pedido(Usuario_Pedido& us_pe, Pedido_Articulo& pe_art, Usuario& u, const
 	:num_(N_pedidos + 1), tarjeta_(&t), fecha_(fp), total_(0)
 {
 	if(u.n_articulos() == 0)
-		throw Pedido::Vacio(&u); 							//Carrito vacio
+		throw Pedido::Vacio(&u); //Carrito vacio
 
 	if(t.titular() != &u)
-		throw Pedido::Impostor(&u); 							//Tarjeta robada
+		throw Pedido::Impostor(&u); //Tarjeta robada
 
 	if(t.caducidad() < fp)
 		throw Tarjeta::Caducada(t.caducidad()); 	//Tarjeta caducada
@@ -30,11 +30,11 @@ Pedido::Pedido(Usuario_Pedido& us_pe, Pedido_Articulo& pe_art, Usuario& u, const
 		}
 	}
 		Usuario::Articulos carroAux = u.compra();
-	 //Hacemos esto pq si leemos y borramos en el mismo contenedor, al borrar elementos
-											  //Los iteradores fallan entonces nos creamos este carro auxiliar para leer y borramos
-											  //En el nuestro
+		//Hacemos esto pq si leemos y borramos en el mismo contenedor, al borrar elementos
+	    //Los iteradores fallan entonces nos creamos este carro auxiliar para leer y borramos
+		//En el nuestro
 
-	for(auto c : carroAux) //												Este for es para restar la cantidad de articulos que nos llevamos
+	for(auto c : carroAux) //	Este for es para restar la cantidad de articulos que nos llevamos
 	{
 		Articulo* pa = c.first;
 		unsigned int cantidad = c.second;
